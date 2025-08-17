@@ -15,18 +15,18 @@ html, body { height: 100%; margin:0; font-family: Inter, system-ui, -apple-syste
 header { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
 h1 { font-size:22px; margin:0; }
 
-.btn { cursor:pointer; border:none; padding:10px 14px; border-radius:12px; background: var(--primary); color:#fff; font-weight:600; }
+.btn { cursor:pointer; border:none; padding:10px 14px; border-radius:12px; background: var(--primary); color:#fff; font-weight:600; transition: 0.2s; }
 .btn:hover { background: var(--primary-2); }
 
-.card { background: var(--card); border-radius: var(--radius); padding:16px; margin-bottom:16px; }
+.card { background: var(--card); border-radius: var(--radius); padding:16px; margin-bottom:16px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
 
 .grid { display:grid; gap:16px; }
 @media (min-width:720px){ .grid.cols-3 { grid-template-columns: repeat(3,1fr); } }
 
 input { width:100%; padding:10px; border-radius:12px; border:1px solid #243044; background:#11161f; color: var(--text); margin-bottom:8px; }
 
-.pill { display:inline-block; padding:6px 12px; background: #222a36; border-radius:999px; }
+.pill { display:inline-block; padding:6px 12px; background: #222a36; border-radius:999px; margin-top:8px; }
 
 .nft-card img { width:100%; aspect-ratio:1/1; object-fit:cover; border-radius: var(--radius) var(--radius) 0 0; }
 
-.nft-actions { margin-top:8px; }
+.nft-actions { margin-top:8px; text-align:center; }

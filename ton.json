@@ -1,0 +1,7 @@
+{
+  "name": "NFT Подарки — Маркетплейс",
+  "description": "Маркетплейс NFT-подарков на TON",
+  "icon": "https://nft-marketplace-83n3esnua-ivans-projects-dd31026c.vercel.app/icon.png",
+  "themeColor": "#0f1216",
+  "defaultWallets": ["Tonkeeper", "Tonhub", "Tonwallet"]
+}
