@@ -9,7 +9,8 @@ from telegram.ext import (
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
-        [InlineKeyboardButton("🔗 Перейти в приложение", url="https://nft-marketplace-gamma-ochre.vercel.app")]
+        InlineKeyboardButton("🔗 Перейти в приложение", url="https://nft-marketplace-83n3esnua-ivans-projects-dd31026c.vercel.app")
+
 
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
