@@ -1,5 +1,6 @@
 {
-  "url": "https://nft-marketplace-83n3esnua-ivans-projects-dd31026c.vercel.app",
   "name": "NFT Marketplace",
-  "iconUrl": "https://nft-marketplace-83n3esnua-ivans-projects-dd31026c.vercel.app/icon.png"
+  "url": "https://твой-проект.vercel.app",
+  "iconUrl": "https://твой-проект.vercel.app/icon.png",
+  "manifestVersion": "1.0"
 }
