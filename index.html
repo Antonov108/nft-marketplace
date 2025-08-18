@@ -1,166 +1,147 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NFT Marketplace</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    .card { border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 8px; width: 250px; }
-    .card img { width: 100%; height: auto; border-radius: 5px; }
-    #connect-btn { padding: 10px 15px; font-size: 16px; margin-bottom: 10px; }
-    .btn { padding: 5px 10px; margin-top: 5px; }
-    #seller-pill { font-weight: bold; margin-left: 10px; }
-    /* Модальное окно */
-    #wallet-modal {
-      display: none;
-      position: fixed;
-      top:0; left:0;
-      width:100%; height:100%;
-      background: rgba(0,0,0,0.5);
-      justify-content: center;
-      align-items: center;
-    }
-    #wallet-modal div {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-    }
-    .wallet-btn { padding: 10px 15px; margin: 5px; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NFT Marketplace</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; }
+  .card { border: 1px solid #ccc; padding: 10px; margin: 10px 0; border-radius: 8px; width: 250px; }
+  .card img { width: 100%; height: auto; border-radius: 5px; }
+  #connect-btn { padding: 10px 15px; font-size: 16px; margin-bottom: 10px; }
+  .btn { padding: 5px 10px; margin-top: 5px; }
+  #seller-pill { font-weight: bold; margin-left: 10px; }
+
+  /* Модальное окно */
+  #wallet-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+  }
+  #wallet-modal .modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    width: 300px;
+  }
+  #wallet-modal button {
+    margin: 5px 0;
+    padding: 10px 15px;
+    width: 100%;
+    font-size: 16px;
+  }
+</style>
 </head>
 <body>
-  <h1>NFT Marketplace</h1>
 
-  <button id="connect-btn">Подключить TON кошелек</button>
-  <span id="seller-pill"></span>
+<h1>NFT Marketplace</h1>
 
-  <!-- Модальное окно выбора кошелька -->
-  <div id="wallet-modal">
-    <div>
-      <h3>Выберите кошелек</h3>
-      <button id="tonkeeper-btn" class="wallet-btn">Tonkeeper</button>
-      <button id="tonhub-btn" class="wallet-btn">Tonhub</button>
-      <br><br>
-      <button id="close-modal">Закрыть</button>
-    </div>
+<button id="connect-btn">Подключить TON кошелек</button>
+<span id="seller-pill"></span>
+
+<!-- Модальное окно -->
+<div id="wallet-modal">
+  <div class="modal-content">
+    <h3>Выберите кошелек</h3>
+    <button id="tonkeeper-btn">Tonkeeper</button>
+    <button id="tonhub-btn">Tonhub</button>
+    <button id="tonwallet-btn">Tonwallet</button>
+    <br><br>
+    <button id="close-modal">Отмена</button>
   </div>
+</div>
 
-  <hr>
+<hr>
 
-  <h2>Добавить NFT</h2>
-  <input id="nft-name" placeholder="Название NFT"><br>
-  <input id="nft-image" placeholder="Ссылка на картинку"><br>
-  <input id="nft-price" placeholder="Цена в TON"><br>
-  <input id="gift-to" placeholder="Кому дарим (необязательно)"><br>
-  <button id="add-btn">Добавить NFT</button>
+<h2>Добавить NFT</h2>
+<input id="nft-name" placeholder="Название NFT"><br>
+<input id="nft-image" placeholder="Ссылка на картинку"><br>
+<input id="nft-price" placeholder="Цена в TON"><br>
+<input id="gift-to" placeholder="Кому дарим (необязательно)"><br>
+<button id="add-btn">Добавить NFT</button>
 
-  <div id="nft-list"></div>
+<div id="nft-list"></div>
 
-  <!-- TonConnect SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@0.13.1/dist/tonconnect.min.js"></script>
-  <script>
-    // Инициализация TonConnect
-    const tonConnect = new TonConnect({
-      manifestUrl: 'https://nft-marketplace-83n3esnua-ivans-projects-dd31026c.vercel.app/tonconnect-manifest.json'
-    });
+<!-- TonConnect SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@tonconnect/sdk@0.13.1/dist/tonconnect.min.js"></script>
+<script>
+const tonConnect = new TonConnect({
+  manifestUrl: 'https://nft-marketplace-83n3esnua-ivans-projects-dd31026c.vercel.app/tonconnect-manifest.json'
+});
 
-    // Элементы страницы
-    const connectBtn = document.getElementById("connect-btn");
-    const sellerPill = document.getElementById("seller-pill");
-    const addBtn = document.getElementById("add-btn");
-    const nftList = document.getElementById("nft-list");
-    const walletModal = document.getElementById("wallet-modal");
-    const tonkeeperBtn = document.getElementById("tonkeeper-btn");
-    const tonhubBtn = document.getElementById("tonhub-btn");
-    const closeModalBtn = document.getElementById("close-modal");
+const connectBtn = document.getElementById("connect-btn");
+const sellerPill = document.getElementById("seller-pill");
+const walletModal = document.getElementById("wallet-modal");
+const closeModalBtn = document.getElementById("close-modal");
 
-    let currentWallet = null;
+// Кнопка открытия модалки
+connectBtn.addEventListener("click", () => {
+  walletModal.style.display = "flex";
+});
 
-    function updateUI(wallet) {
-      if (wallet) {
-        currentWallet = wallet;
-        connectBtn.textContent = "TON кошелёк подключен ✅";
-        sellerPill.textContent = `Продавец: ${wallet.account.address}`;
-      } else {
-        currentWallet = null;
-        connectBtn.textContent = "Подключить TON кошелек";
-        sellerPill.textContent = "";
-      }
-    }
+// Закрыть модалку
+closeModalBtn.addEventListener("click", () => {
+  walletModal.style.display = "none";
+});
 
-    // Открытие/закрытие модального окна
-    connectBtn.addEventListener("click", () => {
-      walletModal.style.display = "flex";
-    });
+// Функция подключения кошелька
+async function connectWallet() {
+  try {
+    const wallet = await tonConnect.connect();
+    connectBtn.textContent = "TON кошелёк подключен ✅";
+    sellerPill.textContent = `Продавец: ${wallet.account.address}`;
+    walletModal.style.display = "none";
+    console.log("Подключённый кошелёк:", wallet.account.address);
+  } catch (e) {
+    console.error("Ошибка подключения кошелька:", e);
+    alert("Не удалось подключить кошелёк. Попробуйте снова.");
+  }
+}
 
-    closeModalBtn.addEventListener("click", () => {
-      walletModal.style.display = "none";
-    });
+// Кнопки выбора кошелька
+document.getElementById("tonkeeper-btn").addEventListener("click", connectWallet);
+document.getElementById("tonhub-btn").addEventListener("click", connectWallet);
+document.getElementById("tonwallet-btn").addEventListener("click", connectWallet);
 
-    // Подключение через выбранный кошелек
-    async function connectWithProvider(provider) {
-      try {
-        const wallet = await tonConnect.connect({
-          universalLink: provider === 'tonkeeper' ? 'https://tonkeeper.com/universal-link' : undefined,
-          bridgeUrl: provider === 'tonhub' ? 'https://tonhub.com/bridge' : undefined
-        });
-        updateUI(wallet);
-        walletModal.style.display = "none";
-        console.log("Подключённый кошелёк:", wallet.account.address);
-      } catch (e) {
-        console.error("Ошибка подключения кошелька:", e);
-        alert("Не удалось подключить кошелёк. Попробуйте снова.");
-      }
-    }
+// Добавление NFT
+const addBtn = document.getElementById("add-btn");
+const nftList = document.getElementById("nft-list");
 
-    tonkeeperBtn.addEventListener("click", () => connectWithProvider('tonkeeper'));
-    tonhubBtn.addEventListener("click", () => connectWithProvider('tonhub'));
+addBtn.addEventListener("click", () => {
+  const name = document.getElementById("nft-name").value;
+  const image = document.getElementById("nft-image").value;
+  const price = document.getElementById("nft-price").value;
+  const giftTo = document.getElementById("gift-to").value;
 
-    // Отслеживание статуса кошелька
-    tonConnect.onStatusChange((wallet) => updateUI(wallet));
+  if (!name || !image || !price) {
+    alert("Заполните все обязательные поля!");
+    return;
+  }
 
-    (async () => {
-      const wallet = await tonConnect.getWallet();
-      if (wallet) updateUI(wallet);
-    })();
+  const card = document.createElement("div");
+  card.className = "card nft-card";
+  card.innerHTML = `
+    <img src="${image}" alt="${name}">
+    <h3>${name}</h3>
+    <p>Цена: ${price} TON</p>
+    ${giftTo ? `<p>Для: ${giftTo}</p>` : ""}
+    <button class="btn" onclick="alert('Покупка пока не реализована')">Купить</button>
+  `;
 
-    // Добавление NFT
-    addBtn.addEventListener("click", () => {
-      if (!currentWallet) {
-        alert("Сначала подключите TON-кошелек!");
-        return;
-      }
+  nftList.appendChild(card);
 
-      const name = document.getElementById("nft-name").value;
-      const image = document.getElementById("nft-image").value;
-      const price = document.getElementById("nft-price").value;
-      const giftTo = document.getElementById("gift-to").value;
-
-      if (!name || !image || !price) {
-        alert("Заполните все обязательные поля!");
-        return;
-      }
-
-      const card = document.createElement("div");
-      card.className = "card nft-card";
-      card.innerHTML = `
-        <img src="${image}" alt="${name}">
-        <h3>${name}</h3>
-        <p>Цена: ${price} TON</p>
-        ${giftTo ? `<p>Для: ${giftTo}</p>` : ""}
-        <button class="btn" onclick="alert('Покупка пока не реализована')">Купить</button>
-      `;
-
-      nftList.appendChild(card);
-
-      // Очистка полей
-      document.getElementById("nft-name").value = "";
-      document.getElementById("nft-image").value = "";
-      document.getElementById("nft-price").value = "";
-      document.getElementById("gift-to").value = "";
-    });
-  </script>
+  // Очистка полей
+  document.getElementById("nft-name").value = "";
+  document.getElementById("nft-image").value = "";
+  document.getElementById("nft-price").value = "";
+  document.getElementById("gift-to").value = "";
+});
+</script>
 </body>
 </html>
